@@ -29,7 +29,12 @@ public class ProductRepo {
 
     Map<Integer, Product> products = new HashMap<>();
 
-    void addSingle(Product product) {
+    public void addSingle(Product product) {
+
+        if (product == null) {
+            return;
+        }
+
         if (products.containsKey(product.productId())){
             return;
         }
@@ -37,7 +42,7 @@ public class ProductRepo {
         products.put(product.productId(), product);
     }
 
-    void removeSingle(Product product) {
+    public void removeSingle(Product product) {
         if (products.isEmpty()){
             return;
         }
@@ -45,15 +50,15 @@ public class ProductRepo {
         products.remove(product.productId());
     }
 
-    Product getSingle(int id) {
+    public Product getSingle(int id) {
         return products.get(id);
     }
 
-    Map<Integer, Product> getAll() {
+    public Map<Integer, Product> getAll() {
         return products;
     }
 
-    void printSingle(int id) {
+    public void printSingle(int id) {
         if (products.isEmpty()){
             return;
         }
@@ -63,7 +68,7 @@ public class ProductRepo {
         System.out.println("Product: " + products.get(id));
     }
 
-    void  printAll() {
+    public void  printAll() {
         if (products.isEmpty()){
             return;
         }
