@@ -1,4 +1,7 @@
 package org.example.records;
 
-public record Order(int orderId, Product product, int quantity) {
+
+import java.util.List;
+
+public record Order(String orderId, List<Product> products) {
 }

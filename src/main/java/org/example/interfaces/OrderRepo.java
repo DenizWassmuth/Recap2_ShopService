@@ -1,5 +1,6 @@
 package org.example.interfaces;
 
+import org.example.classes.ProductRepo;
 import org.example.records.Order;
 
 import java.lang.reflect.Array;
@@ -19,6 +20,7 @@ public interface OrderRepo {
     public void removeMulti(int[] orderIds);
 
     public ArrayList<Order> getAll();
+
 
     public void printSingleById(int id);
 

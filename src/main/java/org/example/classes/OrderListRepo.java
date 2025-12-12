@@ -4,8 +4,6 @@ package org.example.classes;
 import org.example.records.Order;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import org.example.interfaces.OrderRepo;
 
@@ -29,7 +27,11 @@ import org.example.interfaces.OrderRepo;
 
 public class OrderListRepo implements OrderRepo {
 
-    ArrayList<Order> orders = new ArrayList<>();
+    ArrayList<Order> orders;
+
+    public OrderListRepo() {
+        orders = new ArrayList<>();
+    }
 
     @Override
     public void addSingle(Order order) {
@@ -106,6 +108,7 @@ public class OrderListRepo implements OrderRepo {
     public ArrayList<Order> getAll() {
         return orders;
     }
+
 
     @Override
     public void printSingleById(int id) {
