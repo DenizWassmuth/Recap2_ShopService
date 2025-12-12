@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.classes.OrderListRepo;
+import org.example.classes.OrderMapRepo;
 import org.example.classes.ProductRepo;
 import org.example.classes.ShopService;
 import org.example.records.Product;
@@ -28,8 +29,10 @@ public class Main {
         productRepo.printAll();
 
         OrderListRepo orderListRepo = new OrderListRepo();
+        OrderMapRepo orderMapRepo = new OrderMapRepo();
 
-        ShopService shopservice = new ShopService(productRepo, orderListRepo);
+        //ShopService shopservice = new ShopService(productRepo, orderListRepo);
+        ShopService shopservice = new ShopService(productRepo, orderMapRepo);
 
         List<String> productIds = new ArrayList<>();
         String productId = productRepo.getAll().keySet().toArray()[0].toString();
