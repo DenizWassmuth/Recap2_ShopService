@@ -38,7 +38,7 @@ public class ShopService {
         this.orderRepo = orderRepo;
     }
 
-    public void makeOrderBy(List<String> productIds, int quantity) {
+    public void makeOrderById(List<String> productIds, int quantity) {
 
         if (orderRepo == null) {
             System.out.println("OrderRepo is not initialized");

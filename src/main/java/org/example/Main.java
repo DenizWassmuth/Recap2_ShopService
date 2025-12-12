@@ -3,7 +3,6 @@ package org.example;
 import org.example.classes.OrderListRepo;
 import org.example.classes.ProductRepo;
 import org.example.classes.ShopService;
-import org.example.interfaces.OrderRepo;
 import org.example.records.Product;
 import org.example.utils.UtilityLibrary;
 
@@ -23,9 +22,12 @@ public class Main {
         productRepo.addSingle(mouse3);
         productRepo.addSingle(mouse4);
 
+        productRepo.printAll();
+
         OrderListRepo orderListRepo = new OrderListRepo();
 
         ShopService shopservice = new ShopService(productRepo, orderListRepo);
+       // shopservice.makeOrderById();
 
         productRepo.printAll();
 

@@ -47,7 +47,7 @@ public class OrderListRepo implements OrderRepo {
         orders.add(order);
     }
     @Override
-    public void removeSingleById(int orderId) {
+    public void removeSingleById(String orderId) {
 
         if (orders.isEmpty()){
             return;
@@ -67,14 +67,14 @@ public class OrderListRepo implements OrderRepo {
     }
 
     @Override
-    public Order getSingleById(int id) {
+    public Order getSingleById(String id) {
 
         if (orders.isEmpty()) {
             return null;
         }
 
         for (Order order : orders) {
-            if (order.orderId() == id) {
+            if (order.orderId().equals(id)) {
                 return order;
             }
         }
@@ -96,13 +96,13 @@ public class OrderListRepo implements OrderRepo {
     }
 
     @Override
-    public void removeMulti(int[] orderIds) {
+    public void removeMulti(String[] orderIds) {
 
         if(orders.isEmpty()){
             return;
         }
 
-        for (int orderId : orderIds) {
+        for (String orderId : orderIds) {
             removeSingleById(orderId);
         }
     }
@@ -114,14 +114,14 @@ public class OrderListRepo implements OrderRepo {
 
 
     @Override
-    public void printSingleById(int id) {
+    public void printSingleById(String id) {
 
         if (orders.isEmpty()){
             return;
         }
 
         for (Order order : orders){
-            if (order.orderId() == id){
+            if (order.orderId().equals(id)){
                 System.out.println(order);
             }
         }

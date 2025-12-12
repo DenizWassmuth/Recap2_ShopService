@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class ProductRepo {
 
-    Map<Integer, Product> products = new HashMap<>();
+    Map<String, Product> products = new HashMap<>();
 
     public void addSingle(Product product) {
 
@@ -50,11 +50,25 @@ public class ProductRepo {
         products.remove(product.productId());
     }
 
+    void updateSingle(Product product) {
+
+        if (product == null) {
+            return;
+        }
+
+        if (products.containsKey(product.productId())) {
+            products.put(product.productId(), product);
+            return;
+        }
+
+        System.out.println("Product to update not found!");
+    }
+
     public Product getSingle(int id) {
         return products.get(id);
     }
 
-    public Map<Integer, Product> getAll() {
+    public Map<String, Product> getAll() {
         return products;
     }
 

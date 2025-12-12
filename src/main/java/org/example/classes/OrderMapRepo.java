@@ -30,7 +30,7 @@ import java.util.Objects;
 public class OrderMapRepo implements OrderRepo {
 
 
-    Map<Integer, Order> orders = new HashMap<>();
+    Map<String, Order> orders = new HashMap<>();
 
     @Override
     public void addSingle(Order order) {
@@ -46,7 +46,7 @@ public class OrderMapRepo implements OrderRepo {
         orders.put(order.orderId(), order);
     }
     @Override
-    public void removeSingleById(int orderId) {
+    public void removeSingleById(String orderId) {
 
         if (orders.isEmpty()){
             return;
@@ -56,7 +56,7 @@ public class OrderMapRepo implements OrderRepo {
     }
 
     @Override
-    public Order getSingleById(int id) {
+    public Order getSingleById(String id) {
 
         if (orders.isEmpty()){
             return null;
@@ -79,13 +79,13 @@ public class OrderMapRepo implements OrderRepo {
     }
 
     @Override
-    public void removeMulti(int[] orderIds) {
+    public void removeMulti(String[] orderIds) {
 
         if(orders.isEmpty()){
             return;
         }
 
-        for (int orderId : orderIds) {
+        for (String orderId : orderIds) {
             removeSingleById(orderId);
         }
     }
@@ -97,7 +97,7 @@ public class OrderMapRepo implements OrderRepo {
 
 
     @Override
-    public void printSingleById(int id) {
+    public void printSingleById(String id) {
 
         if (orders.isEmpty()){
             return;

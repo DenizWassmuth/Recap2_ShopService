@@ -11,18 +11,18 @@ public interface OrderRepo {
 
     public void addSingle(Order order);
 
-    public void removeSingleById(int orderId);
+    public void removeSingleById(String id);
 
-    public Order getSingleById(int id);
+    public Order getSingleById(String id);
 
     public void addMulti(Order[] order);
 
-    public void removeMulti(int[] orderIds);
+    public void removeMulti(String[] orderIds);
 
     public ArrayList<Order> getAll();
 
 
-    public void printSingleById(int id);
+    public void printSingleById(String id);
 
     public void  printAll();
 }
