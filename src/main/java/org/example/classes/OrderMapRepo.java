@@ -4,7 +4,10 @@ package org.example.classes;
 import org.example.interfaces.OrderRepo;
 import org.example.records.Order;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -26,43 +29,114 @@ import java.util.Map;
 
 public class OrderMapRepo implements OrderRepo {
 
+
+    Map<Integer, Order> orders = new HashMap<>();
+
     @Override
     public void addSingle(Order order) {
 
-    }
+        if (order == null){
+            return;
+        }
 
+        if (orders.containsKey(order.orderId())){
+            return;
+        }
+
+        orders.put(order.orderId(), order);
+    }
     @Override
     public void removeSingleById(int orderId) {
 
+        if (orders.isEmpty()){
+            return;
+        }
+
+        orders.remove(orderId);
     }
 
     @Override
     public Order getSingleById(int id) {
-        return null;
+
+        if (orders.isEmpty()){
+            return null;
+        }
+
+        return orders.get(id);
     }
 
     @Override
-    public void addMulti(Order[] order) {
+    public void addMulti(Order[] orders) {
+
+        if (orders == null){
+            return;
+        }
+
+        for (Order order : orders) {
+            addSingle(order);
+        }
 
     }
 
     @Override
     public void removeMulti(int[] orderIds) {
 
+        if(orders.isEmpty()){
+            return;
+        }
+
+        for (int orderId : orderIds) {
+            removeSingleById(orderId);
+        }
     }
 
     @Override
-    public Map<Integer, Order> getAll() {
-        return Map.of();
+    public ArrayList<Order> getAll() {
+        return null;
     }
 
     @Override
     public void printSingleById(int id) {
 
+        if (orders.isEmpty()){
+            return;
+        }
+
+        if (!orders.containsKey(id)){
+            return;
+        }
+
+        System.out.println(orders.get(id));
     }
 
     @Override
-    public void printAll() {
+    public void  printAll() {
 
+        if (orders.isEmpty()){
+            return;
+        }
+
+        for (Order order: orders.values()) {
+            System.out.println(order);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderListRepo that = (OrderListRepo) o;
+        return Objects.equals(orders, that.orders);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(orders);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderListRepo{" +
+                "orders=" + orders +
+                '}';
     }
 }

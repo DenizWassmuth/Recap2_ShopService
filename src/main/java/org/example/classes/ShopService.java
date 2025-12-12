@@ -1,6 +1,8 @@
 package org.example.classes;
 
 
+import org.example.records.Product;
+
 /**
  *
  * Author: Deniz Wassmuth
@@ -20,5 +22,9 @@ package org.example.classes;
  */
 
 public class ShopService {
+
+    public void makeOrder(int orderId, Product product, int quantity) {
+        
+    }
 
 }

@@ -3,6 +3,7 @@ package org.example.interfaces;
 import org.example.records.Order;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Map;
 
 public interface OrderRepo {
@@ -17,7 +18,7 @@ public interface OrderRepo {
 
     public void removeMulti(int[] orderIds);
 
-    public Map<Integer, Order> getAll();
+    public ArrayList<Order> getAll();
 
     public void printSingleById(int id);
 

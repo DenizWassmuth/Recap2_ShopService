@@ -3,6 +3,7 @@ package org.example.classes;
 
 import org.example.records.Order;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,7 @@ import org.example.interfaces.OrderRepo;
 
 public class OrderListRepo implements OrderRepo {
 
-    Map<Integer, Order> orders = new HashMap<>();
+    ArrayList<Order> orders = new ArrayList<>();
 
     @Override
     public void addSingle(Order order) {
@@ -37,11 +38,11 @@ public class OrderListRepo implements OrderRepo {
             return;
         }
 
-        if (orders.containsKey(order.orderId())){
+        if (orders.contains(order)){
             return;
         }
 
-        orders.put(order.orderId(), order);
+        orders.add(order);
     }
     @Override
     public void removeSingleById(int orderId) {
@@ -50,17 +51,30 @@ public class OrderListRepo implements OrderRepo {
             return;
         }
 
-        orders.remove(orderId);
+        for (Order order : orders){
+            if (order.orderId() == orderId){
+                orders.remove(order);
+            }
+        }
+
+        // TODO: ??
+        //orders.removeIf(order -> order.orderId() == orderId);
     }
 
     @Override
     public Order getSingleById(int id) {
 
-        if (orders.isEmpty()){
+        if (orders.isEmpty()) {
             return null;
         }
 
-        return orders.get(id);
+        for (Order order : orders) {
+            if (order.orderId() == id) {
+                return order;
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -89,7 +103,7 @@ public class OrderListRepo implements OrderRepo {
     }
 
     @Override
-    public Map<Integer, Order> getAll() {
+    public ArrayList<Order> getAll() {
         return orders;
     }
 
@@ -100,11 +114,13 @@ public class OrderListRepo implements OrderRepo {
             return;
         }
 
-        if (!orders.containsKey(id)){
-            return;
+        for (Order order : orders){
+            if (order.orderId() == id){
+                System.out.println(order);
+            }
         }
 
-        System.out.println(orders.get(id));
+        System.out.println("Order with ID: " + id + " not found.");
     }
 
     @Override
@@ -114,7 +130,7 @@ public class OrderListRepo implements OrderRepo {
             return;
         }
 
-        for (Order order: orders.values()) {
+        for (Order order: orders) {
             System.out.println(order);
         }
     }
