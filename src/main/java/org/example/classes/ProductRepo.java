@@ -111,6 +111,14 @@ public class ProductRepo {
         }
     }
 
+    public boolean isValidEntry(String id) {
+        if (products.isEmpty()){
+            return false;
+        }
+
+        return products.containsKey(id);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

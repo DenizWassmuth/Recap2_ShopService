@@ -75,51 +75,74 @@ public class ShopService {
             return;
         }
 
+        Scanner sc = new Scanner(System.in);
+
         List<Product> orderedProducts = new ArrayList<>();
         BigDecimal totalPrice = new BigDecimal("0");
 
-            for (String productId : productIds) {
+        boolean bCancel = false;
+        while (!bCancel) {
+            System.out.println();
+            System.out.println("Pls enter the product ID of the product you want to add to your order");
 
-                if (productRepo.productIsOutOfStock(productId)) {
+            sc.nextLine();
+            String productId = sc.nextLine().trim().toLowerCase();
+
+            // TODO: make productId lenght private and final and add getter
+            boolean bContinue = productId.length() < 5 || !productRepo.isValidEntry(productId);
+            if (bContinue) {
+                System.out.println();
+                System.out.println("Invalid entry");
+                continue;
+            }
+
+
+        }
+
+        for (String productId : productIds) {
+
+            if (productRepo.productIsOutOfStock(productId)) {
+                continue;
+            }
+
+            Product product = productRepo.getSingle(productId);
+
+            //TODO: add input to choose from quantity -> use while loop
+            int orderedQuantity = 0;
+
+            while (true) {
+
+                System.out.println("Please enter the quantity you would like to order for " + product.model());
+
+                String quantityInput = sc.next().trim().toLowerCase();
+
+                if (!Character.isDigit(quantityInput.charAt(0))) {
+                    System.out.println("Wrong input! Quantity must be a digit. Please try again.");
                     continue;
                 }
 
-                Product product = productRepo.getSingle(productId);
+                orderedQuantity = Integer.parseInt(quantityInput);
 
-                //TODO: add input to choose from quantity -> use while loop
-                int orderedQuantity = 0;
-
-                while (true) {
-
-                    System.out.println("Pleaser enter the quantity you would like to order for " + product.model());
-
-                    Scanner sc = new Scanner(System.in);
-                    String quantityInput = sc.next().trim().toLowerCase();
-
-                    if (Character.isDigit(quantityInput.charAt(0))){
-                        orderedQuantity = Integer.parseInt(quantityInput);
-                    }
-
-                    if (orderedQuantity <= 0) {
-                        System.out.println("Order quantity needs to be > 0");
-                        continue;
-                    }
-
-                    if (product.quantity() < orderedQuantity) {
-                        System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
-                        continue;
-                    }
-
-                    break;
+                if (orderedQuantity <= 0) {
+                    System.out.println("Order quantity needs to be > 0");
+                    continue;
                 }
 
-                Product orderedProduct = new Product(product.productId(), product.type(), product.manufacturer(), product.model(), product.price(), orderedQuantity);
-                orderedProducts.add(orderedProduct);
-                totalPrice = totalPrice.add(orderedProduct.price().multiply(BigDecimal.valueOf(orderedQuantity)));
+                if (product.quantity() < orderedQuantity) {
+                    System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
+                    continue;
+                }
 
-                int newRepoQuantity = product.quantity() - orderedQuantity;
-                productRepo.updateSingle(product.withQuantity(newRepoQuantity));
+                break;
             }
+
+            Product orderedProduct = new Product(product.productId(), product.type(), product.manufacturer(), product.model(), product.price(), orderedQuantity);
+            orderedProducts.add(orderedProduct);
+            totalPrice = totalPrice.add(orderedProduct.price().multiply(BigDecimal.valueOf(orderedQuantity)));
+
+            int newRepoQuantity = product.quantity() - orderedQuantity;
+            productRepo.updateSingle(product.withQuantity(newRepoQuantity));
+        }
 
         if (orderedProducts.isEmpty()) {
             System.out.println("No products ordered");
