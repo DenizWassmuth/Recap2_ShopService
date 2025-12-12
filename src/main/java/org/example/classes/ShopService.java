@@ -6,9 +6,11 @@ import org.example.records.Order;
 import org.example.records.Product;
 import org.example.utils.UtilityLibrary;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  *
@@ -30,8 +32,8 @@ import java.util.Random;
 
 public class ShopService {
 
-    ProductRepo productRepo;
-    OrderRepo orderRepo;
+    private ProductRepo productRepo;
+    private OrderRepo orderRepo;
     public ShopService(ProductRepo productRepo, OrderRepo orderRepo) {
 
         this.productRepo = productRepo;
@@ -56,7 +58,7 @@ public class ShopService {
         orderRepo.printAll();
     }
 
-    public void makeOrderById(List<String> productIds, int orderedQuantity) {
+    public void makeOrderById(List<String> productIds) {
 
         if (orderRepo == null) {
             System.out.println("OrderRepo is not initialized");
@@ -73,47 +75,58 @@ public class ShopService {
             return;
         }
 
-        if (orderedQuantity <= 0) {
-            System.out.println("Order quantity needs to be > 0");
-            return;
-        }
-
         List<Product> orderedProducts = new ArrayList<>();
+        BigDecimal totalPrice = new BigDecimal("0");
 
-        for (Product product : productRepo.products.values()) {
             for (String productId : productIds) {
 
-                if (!product.productId().equals(productId)) {
+                if (productRepo.productIsOutOfStock(productId)) {
                     continue;
                 }
 
-                if (product.quantity() <= 0) {
-                    System.out.println("Product " + product + " is out of Stock.");
-                    return;
-                }
+                Product product = productRepo.getSingle(productId);
 
                 //TODO: add input to choose from quantity -> use while loop
+                int orderedQuantity = 0;
 
-                if (product.quantity() < orderedQuantity) {
-                    System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
-                } else {
-                    Product orderedProduct = new Product(product.productId(), product.type(), product.manufacturer(), product.model(), product.price(), orderedQuantity);
-                    orderedProducts.add(orderedProduct);
+                while (true) {
 
-                    int newRepoQuantity = product.quantity() - orderedQuantity;
-                    productRepo.updateSingle(product.withQuantity(newRepoQuantity));
+                    System.out.println("Pleaser enter the quantity you would like to order for " + product.model());
+
+                    Scanner sc = new Scanner(System.in);
+                    String quantityInput = sc.next().trim().toLowerCase();
+
+                    if (Character.isDigit(quantityInput.charAt(0))){
+                        orderedQuantity = Integer.parseInt(quantityInput);
+                    }
+
+                    if (orderedQuantity <= 0) {
+                        System.out.println("Order quantity needs to be > 0");
+                        continue;
+                    }
+
+                    if (product.quantity() < orderedQuantity) {
+                        System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
+                        continue;
+                    }
+
+                    break;
                 }
 
-                break;
+                Product orderedProduct = new Product(product.productId(), product.type(), product.manufacturer(), product.model(), product.price(), orderedQuantity);
+                orderedProducts.add(orderedProduct);
+                totalPrice = totalPrice.add(orderedProduct.price().multiply(BigDecimal.valueOf(orderedQuantity)));
+
+                int newRepoQuantity = product.quantity() - orderedQuantity;
+                productRepo.updateSingle(product.withQuantity(newRepoQuantity));
             }
-        }
 
         if (orderedProducts.isEmpty()) {
             System.out.println("No products ordered");
             return;
         }
 
-        Order newOrder = new Order(UtilityLibrary.getRandomString(), orderedProducts);
+        Order newOrder = new Order(UtilityLibrary.getRandomString(), orderedProducts, totalPrice);
         orderRepo.addSingle(newOrder);
     }
 }

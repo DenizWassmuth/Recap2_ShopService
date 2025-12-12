@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class OrderMapRepo implements OrderRepo {
 
-    Map<String, Order> orders = new HashMap<>();
+    private Map<String, Order> orders = new HashMap<>();
 
     @Override
     public void addSingle(Order order) {
@@ -130,7 +130,7 @@ public class OrderMapRepo implements OrderRepo {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         OrderListRepo that = (OrderListRepo) o;
-        return Objects.equals(orders, that.orders);
+        return Objects.equals(orders, that.getAll());
     }
 
     @Override

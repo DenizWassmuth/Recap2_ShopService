@@ -38,7 +38,7 @@ public class Main {
         String productId = productRepo.getAll().keySet().toArray()[0].toString();
         productIds.add(productId);
 
-        shopservice.makeOrderById(productIds, 5);
+        shopservice.makeOrderById(productIds);
 
         System.out.println();
         shopservice.printAllProductsInProductRepo();

@@ -27,7 +27,7 @@ import org.example.interfaces.OrderRepo;
 
 public class OrderListRepo implements OrderRepo {
 
-    ArrayList<Order> orders;
+    private ArrayList<Order> orders;
 
     public OrderListRepo() {
         orders = new ArrayList<>();
@@ -145,7 +145,7 @@ public class OrderListRepo implements OrderRepo {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         OrderListRepo that = (OrderListRepo) o;
-        return Objects.equals(orders, that.orders);
+        return Objects.equals(orders, that.getAll());
     }
 
     @Override

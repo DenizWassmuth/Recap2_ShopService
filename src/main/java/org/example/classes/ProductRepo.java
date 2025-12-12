@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class ProductRepo {
 
-    Map<String, Product> products = new HashMap<>();
+    private Map<String, Product> products = new HashMap<>();
 
     public void addSingle(Product product) {
 
@@ -64,15 +64,35 @@ public class ProductRepo {
         System.out.println("Product to update not found!");
     }
 
-    public Product getSingle(int id) {
+    public Product getSingle(String id) {
         return products.get(id);
+    }
+
+    public boolean productIsOutOfStock(String id) {
+
+        if (products.isEmpty()) {
+            System.out.println("No products in ProductRepo!");
+            return true;
+        }
+
+        if (products.containsKey(id)) {
+            if(products.get(id).quantity() <= 0){
+                System.out.println("Product is out of stock!");
+                return true;
+            }
+
+            return false;
+        }
+
+        System.out.println("Product is not in ProductRepo!");
+        return true;
     }
 
     public Map<String, Product> getAll() {
         return products;
     }
 
-    public void printSingle(int id) {
+    public void printSingle(String id) {
         if (products.isEmpty()){
             return;
         }
