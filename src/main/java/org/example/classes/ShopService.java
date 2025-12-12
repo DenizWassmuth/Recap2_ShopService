@@ -85,7 +85,6 @@ public class ShopService {
             System.out.println();
             System.out.println("Pls enter the product ID of the product you want to add to your order");
 
-            sc.nextLine();
             String productId = sc.nextLine().trim().toLowerCase();
 
             // TODO: make productId lenght private and final and add getter
@@ -96,7 +95,11 @@ public class ShopService {
                 continue;
             }
 
-
+            Product product = productRepo.getSingle(productId);
+            orderedProducts.add(product);
+            System.out.println(product + " added to List.");
+            bCancel = true;
+            break;
         }
 
         for (String productId : productIds) {
