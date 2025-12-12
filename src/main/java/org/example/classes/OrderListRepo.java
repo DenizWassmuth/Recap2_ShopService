@@ -6,6 +6,7 @@ import org.example.records.Order;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.example.interfaces.OrderRepo;
 
 /**
  *
@@ -25,48 +26,94 @@ import java.util.Objects;
  *
  */
 
-public class OrderListRepo {
+public class OrderListRepo implements OrderRepo {
 
     Map<Integer, Order> orders = new HashMap<>();
 
-    void addSingle(Order order) {
+    @Override
+    public void addSingle(Order order) {
+
+        if (order == null){
+            return;
+        }
+
         if (orders.containsKey(order.orderId())){
             return;
         }
 
         orders.put(order.orderId(), order);
     }
+    @Override
+    public void removeSingleById(int orderId) {
 
-    void removeSingle(Order order) {
         if (orders.isEmpty()){
             return;
         }
 
-        orders.remove(order.orderId());
+        orders.remove(orderId);
     }
 
-    Order getSingle(int id) {
+    @Override
+    public Order getSingleById(int id) {
+
+        if (orders.isEmpty()){
+            return null;
+        }
+
         return orders.get(id);
     }
 
-    Map<Integer, Order> getAll() {
+    @Override
+    public void addMulti(Order[] orders) {
+
+        if (orders == null){
+            return;
+        }
+
+        for (Order order : orders) {
+            addSingle(order);
+        }
+
+    }
+
+    @Override
+    public void removeMulti(int[] orderIds) {
+
+        if(orders.isEmpty()){
+            return;
+        }
+
+        for (int orderId : orderIds) {
+            removeSingleById(orderId);
+        }
+    }
+
+    @Override
+    public Map<Integer, Order> getAll() {
         return orders;
     }
 
-    void printSingle(int id) {
+    @Override
+    public void printSingleById(int id) {
+
         if (orders.isEmpty()){
             return;
         }
+
         if (!orders.containsKey(id)){
             return;
         }
-        System.out.println("Order: " + orders.get(id));
+
+        System.out.println(orders.get(id));
     }
 
-    void  printAll() {
+    @Override
+    public void  printAll() {
+
         if (orders.isEmpty()){
             return;
         }
+
         for (Order order: orders.values()) {
             System.out.println(order);
         }
