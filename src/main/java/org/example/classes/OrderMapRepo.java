@@ -92,7 +92,12 @@ public class OrderMapRepo implements OrderRepo {
 
     @Override
     public ArrayList<Order> getAll() {
-        return null;
+
+        if (orders.isEmpty()){
+            return null;
+        }
+
+        return new ArrayList<>(orders.values());
     }
 
 

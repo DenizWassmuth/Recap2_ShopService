@@ -7,6 +7,8 @@ import org.example.records.Product;
 import org.example.utils.UtilityLibrary;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     static void main() {
@@ -22,14 +24,26 @@ public class Main {
         productRepo.addSingle(mouse3);
         productRepo.addSingle(mouse4);
 
+        System.out.println();
         productRepo.printAll();
 
         OrderListRepo orderListRepo = new OrderListRepo();
 
         ShopService shopservice = new ShopService(productRepo, orderListRepo);
-       // shopservice.makeOrderById();
 
-        productRepo.printAll();
+        List<String> productIds = new ArrayList<>();
+        String productId = productRepo.getAll().keySet().toArray()[0].toString();
+        productIds.add(productId);
+
+        shopservice.makeOrderById(productIds, 5);
+
+        System.out.println();
+        shopservice.printAllProductsInProductRepo();
+
+        System.out.println();
+        shopservice.printAllOrdersInOrderRepo();
+
+       // shopservice.makeOrderById();
 
     }
 }

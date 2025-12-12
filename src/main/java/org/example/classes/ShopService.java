@@ -38,7 +38,25 @@ public class ShopService {
         this.orderRepo = orderRepo;
     }
 
-    public void makeOrderById(List<String> productIds, int quantity) {
+    public void printAllProductsInProductRepo() {
+        if (productRepo == null) {
+            System.out.println("Product Repo is null");
+            return;
+        }
+
+        productRepo.printAll();
+    }
+
+    public void printAllOrdersInOrderRepo() {
+        if (orderRepo == null) {
+            System.out.println("Order Repo is null");
+            return;
+        }
+
+        orderRepo.printAll();
+    }
+
+    public void makeOrderById(List<String> productIds, int orderedQuantity) {
 
         if (orderRepo == null) {
             System.out.println("OrderRepo is not initialized");
@@ -55,7 +73,7 @@ public class ShopService {
             return;
         }
 
-        if (quantity <= 0) {
+        if (orderedQuantity <= 0) {
             System.out.println("Order quantity needs to be > 0");
             return;
         }
@@ -74,10 +92,15 @@ public class ShopService {
                     return;
                 }
 
-                if (product.quantity() < quantity) {
+                if (product.quantity() < orderedQuantity) {
                     System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
                 } else {
-                    orderedProducts.add(product);
+
+                    Product orderedProduct = new Product(product.productId(), product.type(), product.manufacturer(), product.model(), product.price(), orderedQuantity);
+                    orderedProducts.add(orderedProduct);
+
+                    int newRepoQuantity = product.quantity() - orderedQuantity;
+                    productRepo.updateSingle(product.withQuantity(newRepoQuantity));
                 }
 
                 break;
@@ -91,7 +114,5 @@ public class ShopService {
 
         Order newOrder = new Order(UtilityLibrary.getRandomString(), orderedProducts);
         orderRepo.addSingle(newOrder);
-
-        System.out.println("Product with Id: " + productIds + " does not exist.");
     }
 }
