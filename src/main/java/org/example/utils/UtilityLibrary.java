@@ -24,7 +24,7 @@ import java.util.UUID;
 public class UtilityLibrary {
     public static String getRandomString()
     {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().substring(0, 5);
     }
 }
 

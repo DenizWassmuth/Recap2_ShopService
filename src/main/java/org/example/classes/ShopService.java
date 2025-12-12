@@ -92,10 +92,11 @@ public class ShopService {
                     return;
                 }
 
+                //TODO: add input to choose from quantity -> use while loop
+
                 if (product.quantity() < orderedQuantity) {
                     System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
                 } else {
-
                     Product orderedProduct = new Product(product.productId(), product.type(), product.manufacturer(), product.model(), product.price(), orderedQuantity);
                     orderedProducts.add(orderedProduct);
 
