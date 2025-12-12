@@ -54,10 +54,13 @@ public class OrderListRepo implements OrderRepo {
         }
 
         for (Order order : orders){
-            if (order.orderId() == orderId){
-                orders.remove(order);
-            }
+           if(order.orderId().equals(orderId)){
+               orders.remove(order);
+               break;
+           }
         }
+
+        //orders.removeIf(order -> order.orderId().equals(orderId));
 
         // TODO: ??
         //orders.removeIf(order -> order.orderId() == orderId);

@@ -51,50 +51,47 @@ public class ShopService {
         }
 
         if (productIds.isEmpty()) {
-            System.out.println("OrderIds is invalid");
+            System.out.println("OrderIds are invalid");
             return;
         }
 
         if (quantity <= 0) {
-            System.out.println("Quantity needs to be > 0");
+            System.out.println("Order quantity needs to be > 0");
+            return;
         }
 
         List<Product> orderedProducts = new ArrayList<>();
 
-        for (Product product : productRepo.products.values())
-        {
+        for (Product product : productRepo.products.values()) {
             for (String productId : productIds) {
-                if (product.productId().equals(productId)) {
 
-                    if (product.quantity() <= 0) {
-                        System.out.println("Product " + product + " is out of Stock.");
-                        return;
-                    }
-
-                    if (product.quantity() < quantity) {
-                        System.out.println(product + " only " + product.quantity() + " left.");
-                    }
-                    else{
-                        orderedProducts.add(product);
-                    }
-
+                if (!product.productId().equals(productId)) {
+                    continue;
                 }
+
+                if (product.quantity() <= 0) {
+                    System.out.println("Product " + product + " is out of Stock.");
+                    return;
+                }
+
+                if (product.quantity() < quantity) {
+                    System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
+                } else {
+                    orderedProducts.add(product);
+                }
+
+                break;
             }
         }
 
         if (orderedProducts.isEmpty()) {
             System.out.println("No products ordered");
-
             return;
         }
-
 
         Order newOrder = new Order(UtilityLibrary.getRandomString(), orderedProducts);
         orderRepo.addSingle(newOrder);
 
-
         System.out.println("Product with Id: " + productIds + " does not exist.");
-
     }
-
 }
