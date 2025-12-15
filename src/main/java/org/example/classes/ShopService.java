@@ -65,7 +65,7 @@ public class ShopService {
             return;
         }
 
-        if(productRepo == null) {
+        if (productRepo == null) {
             System.out.println("ProductRepo is not initialized");
             return;
         }
@@ -100,8 +100,8 @@ public class ShopService {
             }
 
             Product product = productRepo.getSingle(productId);
-            int orderedQuantity = determineOrderQuantity(product,sc);
 
+            int orderedQuantity = determineOrderQuantity(product, sc);
             if (orderedQuantity <= 0) {
                 continue;
             }
@@ -116,7 +116,7 @@ public class ShopService {
             int newRepoQuantity = product.quantity() - orderedQuantity;
             productRepo.updateSingle(product.withQuantity(newRepoQuantity));
 
-           System.out.println(product + " added to List.");
+            System.out.println(orderedProduct + " added to List.");
 
             bCancel = true;
             break;
@@ -134,7 +134,6 @@ public class ShopService {
 
             String quantityInput = sc.next().trim().toLowerCase();
 
-            Integer.parseInt(quantityInput);
             if (!Character.isDigit(quantityInput.charAt(0))) {
                 System.out.println("Wrong input! Quantity must be a digit. Please try again.");
                 continue;
