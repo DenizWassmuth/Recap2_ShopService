@@ -119,6 +119,7 @@ public class ShopService {
 
             System.out.println(orderedProduct + " added to List.");
 
+            // TODO: add logic to cancel, finish or add to order
             bCancel = true;
             break;
         }
