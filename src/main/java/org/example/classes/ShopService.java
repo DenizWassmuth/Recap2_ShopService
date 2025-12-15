@@ -87,7 +87,7 @@ public class ShopService {
 
             String productId = sc.nextLine().trim().toLowerCase();
 
-            // TODO: make productId lenght private and final and add getter
+            // TODO: make productId length private and final and add getter
             boolean bContinue = productId.length() < 5 || !productRepo.isValidEntry(productId);
             if (bContinue) {
                 System.out.println();
@@ -95,64 +95,66 @@ public class ShopService {
                 continue;
             }
 
-            Product product = productRepo.getSingle(productId);
-            orderedProducts.add(product);
-            System.out.println(product + " added to List.");
-            bCancel = true;
-            break;
-        }
-
-        for (String productId : productIds) {
-
             if (productRepo.productIsOutOfStock(productId)) {
                 continue;
             }
 
             Product product = productRepo.getSingle(productId);
+            int orderedQuantity = determineOrderQuantity(product,sc);
 
-            //TODO: add input to choose from quantity -> use while loop
-            int orderedQuantity = 0;
-
-            while (true) {
-
-                System.out.println("Please enter the quantity you would like to order for " + product.model());
-
-                String quantityInput = sc.next().trim().toLowerCase();
-
-                if (!Character.isDigit(quantityInput.charAt(0))) {
-                    System.out.println("Wrong input! Quantity must be a digit. Please try again.");
-                    continue;
-                }
-
-                orderedQuantity = Integer.parseInt(quantityInput);
-
-                if (orderedQuantity <= 0) {
-                    System.out.println("Order quantity needs to be > 0");
-                    continue;
-                }
-
-                if (product.quantity() < orderedQuantity) {
-                    System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
-                    continue;
-                }
-
-                break;
+            if (orderedQuantity <= 0) {
+                continue;
             }
 
             Product orderedProduct = new Product(product.productId(), product.type(), product.manufacturer(), product.model(), product.price(), orderedQuantity);
             orderedProducts.add(orderedProduct);
             totalPrice = totalPrice.add(orderedProduct.price().multiply(BigDecimal.valueOf(orderedQuantity)));
 
+            Order newOrder = new Order(UtilityLibrary.getRandomString(), orderedProducts, totalPrice);
+            orderRepo.addSingle(newOrder);
+
             int newRepoQuantity = product.quantity() - orderedQuantity;
             productRepo.updateSingle(product.withQuantity(newRepoQuantity));
+
+           System.out.println(product + " added to List.");
+
+            bCancel = true;
+            break;
+        }
+    }
+
+    int determineOrderQuantity(Product product, Scanner sc) {
+
+        int orderedQuantity = 0;
+
+        while (true) {
+
+
+            System.out.println("Please enter the quantity you would like to order for " + product.model());
+
+            String quantityInput = sc.next().trim().toLowerCase();
+
+            Integer.parseInt(quantityInput);
+            if (!Character.isDigit(quantityInput.charAt(0))) {
+                System.out.println("Wrong input! Quantity must be a digit. Please try again.");
+                continue;
+            }
+
+            orderedQuantity = Integer.parseInt(quantityInput);
+
+            if (orderedQuantity <= 0) {
+                System.out.println("Order quantity needs to be > 0");
+                continue;
+            }
+
+            if (product.quantity() < orderedQuantity) {
+                System.out.println(product + " only " + product.quantity() + " left. Try ordering less");
+                continue;
+            }
+
+            break;
         }
 
-        if (orderedProducts.isEmpty()) {
-            System.out.println("No products ordered");
-            return;
-        }
-
-        Order newOrder = new Order(UtilityLibrary.getRandomString(), orderedProducts, totalPrice);
-        orderRepo.addSingle(newOrder);
+        return orderedQuantity;
     }
 }
