@@ -127,6 +127,10 @@ public class ShopService {
 
     int determineOrderQuantity(Product product, Scanner sc) {
 
+        if(product == null || sc == null) {
+            return 0;
+        }
+
         int orderedQuantity = 0;
 
         while (true) {
