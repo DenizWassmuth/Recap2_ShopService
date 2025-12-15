@@ -101,6 +101,7 @@ public class ShopService {
 
             Product product = productRepo.getSingle(productId);
 
+            // TODO:: trycatch ??
             int orderedQuantity = determineOrderQuantity(product, sc);
             if (orderedQuantity <= 0) {
                 continue;
@@ -129,17 +130,16 @@ public class ShopService {
 
         while (true) {
 
-
             System.out.println("Please enter the quantity you would like to order for " + product.model());
 
-            String quantityInput = sc.next().trim().toLowerCase();
-
-            if (!Character.isDigit(quantityInput.charAt(0))) {
+            if(sc.hasNextInt()) {
+                orderedQuantity = sc.nextInt();
+            }
+            else {
                 System.out.println("Wrong input! Quantity must be a digit. Please try again.");
+                sc.next();
                 continue;
             }
-
-            orderedQuantity = Integer.parseInt(quantityInput);
 
             if (orderedQuantity <= 0) {
                 System.out.println("Order quantity needs to be > 0");
